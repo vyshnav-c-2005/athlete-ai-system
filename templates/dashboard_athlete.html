@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2>Athlete Dashboard</h2>
+<a href="/workouts/add/" class="btn btn-primary mb-3">Add Workout</a>
+
+
+<div class="row mt-4">
+
+    <div class="col-md-4">
+        <div class="card p-3 shadow">
+            <h5>Today's Calories Burned</h5>
+            <h2>{{ calories_burned_today }}</h2>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card p-3 shadow">
+            <h5>Today's Calories Consumed</h5>
+            <h2>{{ calories_consumed_today }}</h2>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card p-3 shadow">
+            <h5>Your BMI</h5>
+            <h2>{{ profile.bmi }}</h2>
+        </div>
+    </div>
+
+</div>
+
+<div class="card p-4 shadow mt-4">
+    <h4>Recent Workouts</h4>
+    <table class="table">
+        <tr>
+            <th>Date</th>
+            <th>Duration</th>
+            <th>Intensity</th>
+            <th>Calories</th>
+        </tr>
+
+        {% for w in recent_workouts %}
+        <tr>
+            <td>{{ w.date }}</td>
+            <td>{{ w.duration_minutes }} min</td>
+            <td>{{ w.intensity }}</td>
+            <td>{{ w.calories_burned }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="4">No workouts logged yet.</td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+
+<div class="card p-4 shadow mt-4">
+    <h4>Tomorrow’s Recommendation</h4>
+
+    {% if recommendation %}
+        <p><strong>Workout:</strong> {{ recommendation.workout }}</p>
+        <p><strong>Diet:</strong> {{ recommendation.diet }}</p>
+    {% else %}
+        <p>No recommendations available yet.</p>
+    {% endif %}
+</div>
+
+{% endblock %}
