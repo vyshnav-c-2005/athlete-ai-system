@@ -16,32 +16,13 @@
             <div class="d-flex">
 
                 {% if not request.user.is_authenticated %}
-                <!-- SHOW THESE WHEN LOGGED OUT -->
-                <div class="dropdown me-2">
-                    <button class="btn btn-outline-light btn-sm dropdown-toggle" type="button"
-                        data-bs-toggle="dropdown">
-                        Login
-                    </button>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="{% url 'login_athlete' %}">Athlete Login</a></li>
-                        <li><a class="dropdown-item" href="{% url 'login_coach' %}">Coach Login</a></li>
-                    </ul>
-                </div>
+                <a class="btn btn-outline-light btn-sm me-2" href="{% url 'login' %}">Login</a>
                 <a class="btn btn-outline-light btn-sm me-2" href="{% url 'signup_athlete' %}">Athlete Signup</a>
                 <a class="btn btn-outline-light btn-sm me-2" href="{% url 'signup_coach' %}">Coach Signup</a>
                 {% else %}
-                <!-- SHOW THESE WHEN LOGGED IN -->
-                {% if request.user.coachprofile %}
-                <a class="btn btn-outline-light btn-sm me-2" href="{% url 'coach_dashboard' %}">Coach Dashboard</a>
-                {% else %}
-                <a class="btn btn-outline-light btn-sm me-2" href="{% url 'athlete_dashboard' %}">Dashboard</a>
-                {% endif %}
+                <a class="btn btn-outline-light btn-sm me-2" href="{% url 'dashboard' %}">Dashboard</a>
                 <a class="btn btn-outline-light btn-sm me-2" href="{% url 'profile' %}">Profile</a>
-
-                <form action="/accounts/logout/" method="POST" style="display:inline;">
-                    {% csrf_token %}
-                    <button type="submit" class="btn btn-outline-light btn-sm">Logout</button>
-                </form>
+                <a class="btn btn-outline-light btn-sm" href="{% url 'logout' %}">Logout</a>
                 {% endif %}
 
             </div>

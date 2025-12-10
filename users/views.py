@@ -1,7 +1,8 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth import authenticate, login
-from django.contrib.auth.models import User
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.forms import AuthenticationForm
+
 
 from .models import AthleteProfile, CoachProfile
 from .forms import AthleteProfileForm, AthleteSignupForm, CoachSignupForm
@@ -23,7 +24,7 @@ def athlete_dashboard(request):
     )
     calories_burned_today = sum([w.calories_burned or 0 for w in today_logs])
 
-    # Placeholder until meals module is built
+    #  until meals module is built
     calories_consumed_today = 0
 
     # Recent workouts
@@ -46,9 +47,8 @@ def athlete_dashboard(request):
     })
 
 
-# -----------------------
 # COACH DASHBOARD
-# -----------------------
+
 @login_required
 def coach_dashboard(request):
     coach_profile, created = CoachProfile.objects.get_or_create(user=request.user)
@@ -60,18 +60,15 @@ def coach_dashboard(request):
     })
 
 
-# -----------------------
 # ATHLETE PROFILE VIEW
-# -----------------------
+
 @login_required
 def profile(request):
     profile, created = AthleteProfile.objects.get_or_create(user=request.user)
     return render(request, "users/profile.html", {"profile": profile})
 
 
-# -----------------------
 # EDIT ATHLETE PROFILE
-# -----------------------
 @login_required
 def edit_profile(request):
     profile, created = AthleteProfile.objects.get_or_create(user=request.user)
@@ -87,9 +84,8 @@ def edit_profile(request):
     return render(request, "users/edit_profile.html", {"form": form})
 
 
-# -----------------------
 # SIGNUP — ATHLETE
-# -----------------------
+
 def signup_athlete(request):
     if request.method == "POST":
         form = AthleteSignupForm(request.POST)
@@ -112,9 +108,9 @@ def signup_athlete(request):
     return render(request, "users/signup_athlete.html", {"form": form})
 
 
-# -----------------------
+
 # SIGNUP — COACH
-# -----------------------
+
 def signup_coach(request):
     if request.method == "POST":
         form = CoachSignupForm(request.POST)
@@ -132,3 +128,30 @@ def signup_coach(request):
         form = CoachSignupForm()
 
     return render(request, "users/signup_coach.html", {"form": form})
+
+
+# DISPATCHER & AUTH
+
+@login_required
+def dashboard(request):
+    if hasattr(request.user, 'coachprofile'):
+        return redirect('coach_dashboard')
+    elif hasattr(request.user, 'athleteprofile'):
+        return redirect('athlete_dashboard')
+    return redirect('profile')
+
+def login_view(request):
+    if request.method == "POST":
+        form = AuthenticationForm(request, data=request.POST)
+        if form.is_valid():
+            user = form.get_user()
+            login(request, user)
+            return redirect('dashboard')
+    else:
+        form = AuthenticationForm()
+    return render(request, "users/login.html", {"form": form})
+
+def logout_view(request):
+    logout(request)
+    return redirect('home')
+
