@@ -47,6 +47,20 @@ def athlete_dashboard(request):
 
 
 # -----------------------
+# COACH DASHBOARD
+# -----------------------
+@login_required
+def coach_dashboard(request):
+    coach_profile, created = CoachProfile.objects.get_or_create(user=request.user)
+    athletes = coach_profile.athletes.all()
+    
+    return render(request, "users/dashboard_coach.html", {
+        "coach": coach_profile,
+        "athletes": athletes
+    })
+
+
+# -----------------------
 # ATHLETE PROFILE VIEW
 # -----------------------
 @login_required
@@ -112,7 +126,7 @@ def signup_coach(request):
             CoachProfile.objects.create(user=user)
 
             login(request, user)
-            return redirect("/coach/dashboard/")
+            return redirect("coach_dashboard")
 
     else:
         form = CoachSignupForm()

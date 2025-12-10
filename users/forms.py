@@ -13,6 +13,7 @@ class AthleteProfileForm(forms.ModelForm):
             'weight_kg',
             'experience_level',
             'training_goal',
+            'coach',
         ]
 
 

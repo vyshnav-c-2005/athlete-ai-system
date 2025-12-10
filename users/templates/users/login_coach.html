@@ -5,7 +5,7 @@
 <form method="POST" action="/accounts/login/">
     {% csrf_token %}
     {{ form.as_p }}
-    <input type="hidden" name="next" value="/coach/dashboard/">
+    <input type="hidden" name="next" value="/users/coach/dashboard/">
     <button type="submit" class="btn btn-danger">Login as Coach</button>
 </form>
 {% endblock %}

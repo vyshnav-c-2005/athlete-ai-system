@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Coach Dashboard</h2>
+    <p class="lead">Welcome, Coach {{ coach.user.username }}!</p>
+
+    <div class="card mt-4">
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">My Athletes</h4>
+        </div>
+        <div class="card-body">
+            {% if athletes %}
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Sport</th>
+                            <th>Event</th>
+                            <th>Experience</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for athlete in athletes %}
+                        <tr>
+                            <td>{{ athlete.user.username }}</td>
+                            <td>{{ athlete.get_sport_group_display }}</td>
+                            <td>{{ athlete.get_sport_event_display }}</td>
+                            <td>{{ athlete.get_experience_level_display }}</td>
+                            <td>
+                                <a href="#" class="btn btn-sm btn-info">View Progress</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="alert alert-info">
+                You don't have any athletes assigned yet.
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

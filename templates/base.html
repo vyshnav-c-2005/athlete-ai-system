@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Athlete AI System</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
@@ -7,37 +8,52 @@
 
 <body>
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
 
-        <a class="navbar-brand" href="/">Athlete AI System</a>
+            <a class="navbar-brand" href="/">Athlete AI System</a>
 
-        <div class="d-flex">
+            <div class="d-flex">
 
-            {% if not request.user.is_authenticated %}
+                {% if not request.user.is_authenticated %}
                 <!-- SHOW THESE WHEN LOGGED OUT -->
-                <a class="btn btn-outline-light btn-sm me-2" href="/accounts/login/">Login</a>
-                <a class="btn btn-outline-light btn-sm me-2" href="/users/signup/athlete/">Athlete Signup</a>
-                <a class="btn btn-outline-light btn-sm me-2" href="/users/signup/coach/">Coach Signup</a>
-            {% else %}
+                <div class="dropdown me-2">
+                    <button class="btn btn-outline-light btn-sm dropdown-toggle" type="button"
+                        data-bs-toggle="dropdown">
+                        Login
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="{% url 'login_athlete' %}">Athlete Login</a></li>
+                        <li><a class="dropdown-item" href="{% url 'login_coach' %}">Coach Login</a></li>
+                    </ul>
+                </div>
+                <a class="btn btn-outline-light btn-sm me-2" href="{% url 'signup_athlete' %}">Athlete Signup</a>
+                <a class="btn btn-outline-light btn-sm me-2" href="{% url 'signup_coach' %}">Coach Signup</a>
+                {% else %}
                 <!-- SHOW THESE WHEN LOGGED IN -->
-                <a class="btn btn-outline-light btn-sm me-2" href="/users/dashboard/">Dashboard</a>
-                <a class="btn btn-outline-light btn-sm me-2" href="/users/profile/">Profile</a>
+                {% if request.user.coachprofile %}
+                <a class="btn btn-outline-light btn-sm me-2" href="{% url 'coach_dashboard' %}">Coach Dashboard</a>
+                {% else %}
+                <a class="btn btn-outline-light btn-sm me-2" href="{% url 'athlete_dashboard' %}">Dashboard</a>
+                {% endif %}
+                <a class="btn btn-outline-light btn-sm me-2" href="{% url 'profile' %}">Profile</a>
 
                 <form action="/accounts/logout/" method="POST" style="display:inline;">
                     {% csrf_token %}
                     <button type="submit" class="btn btn-outline-light btn-sm">Logout</button>
                 </form>
-            {% endif %}
+                {% endif %}
 
+            </div>
         </div>
+    </nav>
+
+    <div class="container mt-4">
+        {% block content %}
+        {% endblock %}
     </div>
-</nav>
 
-<div class="container mt-4">
-    {% block content %}
-    {% endblock %}
-</div>
-
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>
