@@ -10,9 +10,7 @@ from workouts.models import WorkoutLog
 import datetime
 
 
-# -----------------------
 # ATHLETE DASHBOARD
-# -----------------------
 @login_required
 def athlete_dashboard(request):
     profile, created = AthleteProfile.objects.get_or_create(user=request.user)
@@ -109,7 +107,7 @@ def signup_athlete(request):
 
 
 
-# SIGNUP — COACH
+# Signup  for  coach
 
 def signup_coach(request):
     if request.method == "POST":
@@ -130,7 +128,7 @@ def signup_coach(request):
     return render(request, "users/signup_coach.html", {"form": form})
 
 
-# DISPATCHER & AUTH
+#authication
 
 @login_required
 def dashboard(request):
